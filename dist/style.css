@@ -1,0 +1,39 @@
+body {
+    margin: 0;
+    padding: 0;
+    color: white;
+    background-color: #000000;
+}
+
+.start-menu {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-button {
+    background-color: purple;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    height: 250px;
+    width: 250px;
+    font-size: larger;
+    border-color: darkmagenta;
+}
+
+.app {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hide {
+    display: none;
+}
