@@ -6,6 +6,14 @@ function playSound(sound: HTMLAudioElement) {
   });
 }
 
+function getAssetFolder() {
+  let folder = "/assets/";
+  if (import.meta.env.PROD === true) {
+    folder = "/fb" + folder;
+  }
+  return folder;
+}
+
 // attach method to window so html scope can access it
 window["startFaceBlaster"] = () => {
   const startMenu: HTMLElement = document.querySelector(".start-menu");
@@ -26,7 +34,7 @@ window["startFaceBlaster"] = () => {
     document.getElementById("pixi-container")!.appendChild(app.canvas);
 
     // Load the bunny texture
-    const texture = await Assets.load("/assets/bunny.png");
+    const texture = await Assets.load(getAssetFolder() + "bunny.png");
 
     // Create a bunny Sprite
     const bunny = new Sprite(texture);
