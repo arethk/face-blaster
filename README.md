@@ -1,2 +1,2 @@
 # face-blaster
-Sometimes you need to blast some faces
+Sometimes you need to blast some face
