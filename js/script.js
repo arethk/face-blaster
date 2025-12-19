@@ -1,3 +1,4 @@
+const DEV = false;
 class FaceBlaster {
     constructor() {
         // singelton
@@ -8,6 +9,7 @@ class FaceBlaster {
         // make the ui selectors handy and setup event listeners
         this.header = document.querySelector(".header");
         this.time = document.querySelector(".time");
+        this.footer = document.querySelector(".footer");
         this.points = document.querySelector(".points");
         this.container = document.querySelector(".container");
         this.gameover = document.querySelector(".gameover");
@@ -17,6 +19,9 @@ class FaceBlaster {
 
     reset() {
         this.level = 0;
+        this.header.classList.remove("hide");
+        this.time.classList.remove("hide");
+        this.footer.classList.remove("hide");
         this.setHeader("Start Blasting Faces!");
         this.setTime(10);
         this.setPoints(0);
@@ -59,13 +64,14 @@ class FaceBlaster {
 
     runLevel1() {
         this.level4x4.classList.remove("hide");
-        this.startTimer(3);
+        this.startTimer(10);
     }
 
     handleTimesUp() {
         this.setHeader("Game Over!");
         this.hideContainerElements();
         this.gameover.classList.remove("hide");
+        this.playVideo("#videoGameOver");
     }
 
     setHeader(message) {
@@ -134,6 +140,21 @@ class FaceBlaster {
         console.log(e);
     }
 
+    playVideo(id) {
+        const video = document.querySelector(id);
+        video.currentTime = 0;
+        video.classList.remove("hide");
+        this.fadeInElement(video);
+        video.play().catch(error => {
+            console.log('Playback failed:', error);
+        });
+    }
+
+    stopVideo(id) {
+        const video = document.querySelector(id);
+        video.pause();
+    }
+
     destroy() {
         if (this.interval) {
             clearInterval(this.interval);
@@ -142,18 +163,35 @@ class FaceBlaster {
 }
 
 const app = new FaceBlaster();
-app.reset();
 
 window.onbeforeunload = function () {
     app.destroy();
 }
 
 function startFaceBlaster() {
-    const startMenu = document.querySelector(".start-menu");
-    startMenu.classList.add("hide");
-    playSound("#soundStart");
+    const startButton = document.querySelector(".start-button");
+    startButton.classList.add("hide");
+    if (DEV === false) {
+        const video = document.querySelector("#videoStart");
+        app.playVideo("#videoStart");
+        setTimeout(() => {
+            app.fadeOutElement(video);
+        }, 4000);
+        setTimeout(() => {
+            app.stopVideo("#videoStart");
+            const startMenu = document.querySelector(".start-menu");
+            startMenu.classList.add("hide");
+            app.reset();
+        }, 5000);
+    } else {
+        const startMenu = document.querySelector(".start-menu");
+        startMenu.classList.add("hide");
+        app.reset();
+    }
 }
 
+/*
+//playSound("#soundStart");
 function playSound(id) {
     const sound = document.querySelector(id);
     if (sound) {
@@ -164,7 +202,13 @@ function playSound(id) {
         console.error("Sound not found");
     }
 }
+*/
 
 function tryAgain() {
+    app.stopVideo("#videoGameOver");
     app.reset();
+}
+
+if (DEV === true) {
+    startFaceBlaster();
 }

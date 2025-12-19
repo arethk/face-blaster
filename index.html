@@ -10,17 +10,24 @@
 </head>
 
 <body>
-    <div class="start-menu hide">
+    <div class="start-menu">
         <button type="button" class="start-button" onclick="startFaceBlaster()">Start Face Blaster</button>
+        <video id="videoStart" class="hide" width="100%" height="100%" preload="auto" poster="assets/start_poster.png">
+            <source src="assets/start.mp4" type="video/mp4">
+        </video>
     </div>
     <div class="game">
-        <div class="header"></div>
-        <div class="time"></div>
+        <div class="header hide"></div>
+        <div class="time hide"></div>
         <div class="container">
-            <div class="gameover">
+            <div class="gameover hide">
+                <video id="videoGameOver" class="" width="100%" height="100%" preload="auto"
+                    poster="assets/gameover_poster.png" loop>
+                    <source src="assets/gameover.mp4" type="video/mp4">
+                </video>
                 <button type="button" class="tryagain-button" onclick="tryAgain()">Try Again</button>
             </div>
-            <div class="level4x4">
+            <div class="level4x4 hide">
                 <div class="cell0"></div>
                 <div class="cell1"></div>
                 <div class="cell2"></div>
@@ -39,13 +46,13 @@
                 <div class="cell15"></div>
             </div>
         </div>
-        <div class="footer">
+        <div class="footer hide">
             Points: <span class="points"></span>
         </div>
     </div>
-    <audio id="soundStart" preload="auto">
+    <!-- <audio id="soundStart" preload="auto">
         <source src="sounds/start.mp3" type="audio/mpeg" />
-    </audio>
+    </audio> -->
     <script src="js/script.js"></script>
 </body>
 
