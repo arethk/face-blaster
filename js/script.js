@@ -9,10 +9,10 @@ class FaceBlaster {
         this.header = document.querySelector(".header");
         this.time = document.querySelector(".time");
         this.points = document.querySelector(".points");
-        this.levels = document.querySelector(".levels");
+        this.container = document.querySelector(".container");
         this.gameover = document.querySelector(".gameover");
-        this.level1 = document.querySelector(".level1");
-        this.levels.addEventListener("click", this.handleLevelElementClick);
+        this.level4x4 = document.querySelector(".level4x4");
+        this.container.addEventListener("click", this.handleLevelElementClick);
     }
 
     reset() {
@@ -20,18 +20,18 @@ class FaceBlaster {
         this.setHeader("Start Blasting Faces!");
         this.setTime(10);
         this.setPoints(0);
-        this.hideAllLevelElements();
+        this.hideContainerElements();
         this.runGame();
     }
 
-    hideAllLevelElements() {
-        const levelsElement = document.querySelector(".levels");
-        if (levelsElement) {
-            Array.from(levelsElement.children).forEach((container) => {
+    hideContainerElements() {
+        const element = document.querySelector(".container");
+        if (element) {
+            Array.from(element.children).forEach((container) => {
                 container.classList.add("hide");
             });
         } else {
-            console.error("Levels element not found");
+            console.error("Container element not found");
         }
     }
 
@@ -58,13 +58,13 @@ class FaceBlaster {
     }
 
     runLevel1() {
-        this.level1.classList.remove("hide");
+        this.level4x4.classList.remove("hide");
         this.startTimer(3);
     }
 
     handleTimesUp() {
         this.setHeader("Game Over!");
-        this.hideAllLevelElements();
+        this.hideContainerElements();
         this.gameover.classList.remove("hide");
     }
 
@@ -88,7 +88,28 @@ class FaceBlaster {
         return parseInt(this.time.innerHTML);
     }
 
-    fadeElement(element) {
+    fadeInElement(element) {
+        if (element && element.style) {
+            element.style.opacity = 0;
+            let timeout = 0;
+            let max = 100;
+            for (let i = 0; i <= max; i++) {
+                timeout += 10;
+                setTimeout(() => {
+                    const currentOpacity = parseFloat(element.style.opacity);
+                    let newOpacity = currentOpacity + 0.01 > 1 ? 1 : currentOpacity + 0.01;
+                    if (i === max) {
+                        newOpacity = 1;
+                    }
+                    element.style.opacity = newOpacity;
+                }, timeout);
+            }
+        } else {
+            console.error("element not found, cannot fade in");
+        }
+    }
+
+    fadeOutElement(element) {
         if (element && element.style) {
             element.style.opacity = 1;
             let timeout = 0;
@@ -96,7 +117,8 @@ class FaceBlaster {
             for (let i = 0; i <= max; i++) {
                 timeout += 10;
                 setTimeout(() => {
-                    let newOpacity = element.style.opacity - 0.01 < 0 ? 0 : element.style.opacity - 0.01;
+                    const currentOpacity = parseFloat(element.style.opacity);
+                    let newOpacity = currentOpacity - 0.01 < 0 ? 0 : currentOpacity - 0.01;
                     if (i === max) {
                         newOpacity = 0;
                     }
@@ -104,7 +126,7 @@ class FaceBlaster {
                 }, timeout);
             }
         } else {
-            console.error("element not found, cannot fade");
+            console.error("element not found, cannot fade out");
         }
     }
 
