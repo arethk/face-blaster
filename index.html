@@ -12,7 +12,8 @@
 <body>
     <div class="start-menu">
         <button type="button" class="start-button" onclick="startFaceBlaster()">Start Face Blaster</button>
-        <video id="videoStart" class="hide" width="100%" height="100%" preload="auto" poster="assets/start_poster.png">
+        <video id="videoStart" class="hide" width="100%" height="100%" preload="auto" poster="assets/start_poster.png"
+            playsinline>
             <source src="assets/start.mp4" type="video/mp4">
         </video>
     </div>
@@ -22,7 +23,7 @@
         <div class="container">
             <div class="gameover hide">
                 <video id="videoGameOver" class="" width="100%" height="100%" preload="auto"
-                    poster="assets/gameover_poster.png" loop>
+                    poster="assets/gameover_poster.png" loop playsinline>
                     <source src="assets/gameover.mp4" type="video/mp4">
                 </video>
                 <button type="button" class="tryagain-button" onclick="tryAgain()">Try Again</button>

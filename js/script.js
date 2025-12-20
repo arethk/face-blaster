@@ -73,7 +73,7 @@ class FaceBlaster {
                     height="100%" 
                     preload="auto"
                     poster="assets/enemy1_poster.png"
-                    loop muted autoplay>
+                    loop muted autoplay playsinline>
                     <source src="assets/enemy1.mp4" type="video/mp4">
                 </video>
             `;
