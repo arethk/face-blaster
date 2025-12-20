@@ -1,4 +1,4 @@
-const DEV = true;
+const DEV = false;
 class FaceBlaster {
     constructor() {
         // singelton
@@ -64,19 +64,17 @@ class FaceBlaster {
 
     runLevel1() {
         this.level4x4.classList.remove("hide");
-        this.startTimer(1000);
+        this.startTimer(10);
         const cells = this.level4x4.querySelectorAll("div");
-        Array.from(cells).forEach((cell) => {
-            cell.innerHTML = `
-                <video
-                    width="100%" 
-                    height="100%" 
-                    preload="auto"
-                    poster="assets/enemy1_poster.png"
-                    loop muted autoplay playsinline>
-                    <source src="assets/enemy1.mp4" type="video/mp4">
-                </video>
-            `;
+        Array.from(cells).forEach((cell, i) => {
+            const video = document.querySelector("#enemy1");
+            const clone = video.cloneNode(true);
+            clone.id = "enemy1Clone" + i;
+            clone.classList.remove("hide");
+            clone.loop = true;
+            clone.muted = true;
+            clone.autoplay = true;
+            cell.replaceChildren(clone);
         });
     }
 
@@ -84,7 +82,13 @@ class FaceBlaster {
         this.setHeader("Game Over!");
         this.hideContainerElements();
         this.gameover.classList.remove("hide");
-        this.playVideo("#videoGameOver");
+        const video = document.querySelector("#videoGameOver");
+        const clone = video.cloneNode(true);
+        clone.id = "videoGameOverClone";
+        clone.loop = true;
+        clone.muted = false;
+        this.gameover.prepend(clone);
+        this.playVideo(clone);
     }
 
     setHeader(message) {
@@ -153,18 +157,16 @@ class FaceBlaster {
         console.log(e);
     }
 
-    playVideo(id) {
-        const video = document.querySelector(id);
+    playVideo(video) {
         video.currentTime = 0;
         video.classList.remove("hide");
         this.fadeInElement(video);
         video.play().catch(error => {
-            console.log('Playback failed:', error);
+            console.log("Video playback failed:", error);
         });
     }
 
-    stopVideo(id) {
-        const video = document.querySelector(id);
+    stopVideo(video) {
         video.pause();
     }
 
@@ -182,23 +184,24 @@ window.onbeforeunload = function () {
 }
 
 function startFaceBlaster() {
-    const startButton = document.querySelector(".start-button");
-    startButton.classList.add("hide");
+    const startMenu = document.querySelector(".start-menu");
     if (DEV === false) {
         const video = document.querySelector("#videoStart");
-        app.playVideo("#videoStart");
+        const clone = video.cloneNode(true);
+        clone.id = "videoStartClone";
+        clone.muted = false;
+        startMenu.replaceChildren(clone);
+        app.playVideo(clone);
         setTimeout(() => {
-            app.fadeOutElement(video);
+            app.fadeOutElement(clone);
         }, 4000);
         setTimeout(() => {
-            app.stopVideo("#videoStart");
-            const startMenu = document.querySelector(".start-menu");
-            startMenu.classList.add("hide");
+            app.stopVideo(clone);
+            startMenu.remove();
             app.reset();
         }, 5000);
     } else {
-        const startMenu = document.querySelector(".start-menu");
-        startMenu.classList.add("hide");
+        startMenu.remove();
         app.reset();
     }
 }
@@ -218,7 +221,8 @@ function playSound(id) {
 */
 
 function tryAgain() {
-    app.stopVideo("#videoGameOver");
+    const video = document.querySelector("#videoGameOverClone");
+    video.remove();
     app.reset();
 }
 
