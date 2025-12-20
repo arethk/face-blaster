@@ -64,7 +64,20 @@ class FaceBlaster {
 
     runLevel1() {
         this.level4x4.classList.remove("hide");
-        this.startTimer(10);
+        this.startTimer(1000);
+        const cells = this.level4x4.querySelectorAll("div");
+        Array.from(cells).forEach((cell) => {
+            cell.innerHTML = `
+                <video
+                    width="100%" 
+                    height="100%" 
+                    preload="auto"
+                    poster="assets/enemy1_poster.png"
+                    loop muted autoplay>
+                    <source src="assets/enemy1.mp4" type="video/mp4">
+                </video>
+            `;
+        });
     }
 
     handleTimesUp() {
