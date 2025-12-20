@@ -59,20 +59,20 @@ body {
 
 .header {
     margin: auto;
-    font-size: 3.0vw;
+    font-size: 7.0vw;
     font-weight: bold;
 }
 
 .time {
     margin: auto;
-    font-size: 3.0vw;
+    font-size: 6.0vw;
     font-weight: bold;
 }
 
 .footer {
     margin: auto;
     padding-top: 5px;
-    font-size: 1.5vw;
+    font-size: 4.0vw;
     font-weight: bold;
 }
 
@@ -80,8 +80,6 @@ body {
     display: grid;
     height: 80vh;
     width: 100vw;
-    /* grid-template-rows: repeat(4, minmax(10px, 1fr)); */
-    /* grid-template-columns: repeat(4, minmax(20px, 1fr)); */
     grid-template-rows: repeat(4, 1fr);
     grid-template-columns: repeat(4, 1fr);
     margin: auto;
