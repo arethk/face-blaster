@@ -1,4 +1,4 @@
-const DEV = false;
+const DEV = true;
 class FaceBlaster {
     constructor() {
         // singelton
