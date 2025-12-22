@@ -103,13 +103,13 @@ class FaceBlaster {
     }
 
     runLevel1() {
-        this.level4x4.classList.remove("hide");
         this.startTimer(10);
         const cells = this.level4x4.querySelectorAll("div");
         Array.from(cells).forEach((cell, i) => {
             const video = app.createVideo(this.assets["enemy1"].objectURL, "videoEnemy1_" + i, true, true, true);
             cell.replaceChildren(video);
         });
+        this.level4x4.classList.remove("hide");
     }
 
     handleTimesUp() {
@@ -117,7 +117,7 @@ class FaceBlaster {
         this.hideContainerElements();
         this.clearLevels();
         this.gameover.classList.remove("hide");
-        const video = app.createVideo(this.assets["gameover"].objectURL, "videoGameOver", false, true, false);
+        const video = app.createVideo(this.assets["gameover"].objectURL, "videoGameOver", false, true, true);
         this.gameover.prepend(video);
         this.playVideo(video);
     }
