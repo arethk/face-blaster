@@ -123,7 +123,7 @@ class FaceBlaster {
         this.clearLevels();
         this.gameover.classList.remove("hide");
         const video = this.createVideo(this.assets["gameover"].objectURL, "videoGameOver", false, true, false);
-        this.gameover.replaceChildren(video);
+        this.gameover.prepend(video);
         this.playVideo(video);
     }
 
@@ -208,7 +208,7 @@ class FaceBlaster {
     playVideo(video) {
         video.currentTime = 0;
         video.classList.remove("hide");
-        this.fadeInElement(video);
+        //this.fadeInElement(video);
         video.play().catch(error => {
             console.log("Video playback failed:", error);
         });
