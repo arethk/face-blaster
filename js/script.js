@@ -289,6 +289,7 @@ function playSound(id) {
 
 function tryAgain() {
     const video = document.querySelector("#videoGameOver");
-    video.remove();
+    //video.remove();
+    app.stopVideo(video);
     app.reset();
 }
