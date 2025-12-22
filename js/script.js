@@ -208,8 +208,9 @@ class FaceBlaster {
     playVideo(video) {
         video.currentTime = 0;
         video.classList.remove("hide");
-        //this.fadeInElement(video);
+        this.fadeInElement(video);
         video.play().catch(error => {
+            alert(error);
             console.log("Video playback failed:", error);
         });
     }
