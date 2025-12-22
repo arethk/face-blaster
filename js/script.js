@@ -8,10 +8,10 @@ const assets = {
         objectURL: null,
         url: "assets/enemy1.mp4"
     },
-    "gameover": {
-        objectURL: null,
-        url: "assets/gameover.mp4"
-    }
+    // "gameover": {
+    //     objectURL: null,
+    //     url: "assets/gameover.mp4"
+    // }
 };
 async function loadAssets(data) {
     const promises = [];
@@ -122,9 +122,11 @@ class FaceBlaster {
         this.hideContainerElements();
         this.clearLevels();
         this.gameover.classList.remove("hide");
-        const video = this.createVideo(this.assets["gameover"].objectURL, "videoGameOver", false, true, false);
-        this.gameover.prepend(video);
+        const video = document.querySelector("#videoGameOver");
+        // const video = this.createVideo(this.assets["gameover"].objectURL, "videoGameOver", false, true, false);
+        // this.gameover.prepend(video);
         this.playVideo(video);
+
     }
 
     setHeader(message) {
@@ -210,7 +212,6 @@ class FaceBlaster {
         video.classList.remove("hide");
         this.fadeInElement(video);
         video.play().catch(error => {
-            alert(error);
             console.log("Video playback failed:", error);
         });
     }
