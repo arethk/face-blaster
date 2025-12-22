@@ -35,6 +35,7 @@ class FaceBlaster {
         FaceBlaster.instance = this;
         // make the ui selectors handy and setup event listeners
         this.assets = assets;
+        this.gameContainer = document.querySelector(".game");
         this.header = document.querySelector(".header");
         this.time = document.querySelector(".time");
         this.footer = document.querySelector(".footer");
@@ -103,6 +104,8 @@ class FaceBlaster {
     }
 
     runLevel1() {
+        this.gameContainer.classList.add("hide");
+        this.level4x4.classList.remove("hide");
         this.startTimer(10);
         const cells = this.level4x4.querySelectorAll("div");
         Array.from(cells).forEach((cell, i) => {
@@ -110,8 +113,8 @@ class FaceBlaster {
             cell.replaceChildren(video);
         });
         setTimeout(() => {
-            this.level4x4.classList.remove("hide");
-        }, 1000);
+            this.gameContainer.classList.remove("hide");
+        }, 500);
     }
 
     handleTimesUp() {
