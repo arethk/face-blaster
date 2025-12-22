@@ -54,6 +54,7 @@ class FaceBlaster {
         this.setTime(10);
         this.setPoints(0);
         this.hideContainerElements();
+        this.clearLevels();
         this.runGame();
     }
 
@@ -65,6 +66,17 @@ class FaceBlaster {
             });
         } else {
             console.error("Container element not found");
+        }
+    }
+
+    clearLevels() {
+        const elements = document.querySelectorAll(".cell");
+        if (elements) {
+            Array.from(elements).forEach((cell) => {
+                cell.replaceChildren();
+            });
+        } else {
+            console.error("Cell elements not found");
         }
     }
 
@@ -103,6 +115,7 @@ class FaceBlaster {
     handleTimesUp() {
         this.setHeader("Game Over!");
         this.hideContainerElements();
+        this.clearLevels();
         this.gameover.classList.remove("hide");
         const video = app.createVideo(this.assets["gameover"].objectURL, "videoGameOver", false, true, false);
         this.gameover.prepend(video);
