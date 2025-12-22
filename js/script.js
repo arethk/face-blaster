@@ -109,7 +109,7 @@ class FaceBlaster {
             const video = app.createVideo(this.assets["enemy1"].objectURL, "videoEnemy1_" + i, true, true, true);
             cell.replaceChildren(video);
         });
-        this.setTimeout(() => {
+        setTimeout(() => {
             this.level4x4.classList.remove("hide");
         }, 1000);
     }
