@@ -227,9 +227,8 @@ function startFaceBlaster() {
         const video = document.createElement("video");
         video.src = URL.createObjectURL(assets["start"].blob);
         video.classList.add("video");
-        video.setAttribute("playsinline", "true");
+        video.setAttribute("playsinline", "");
         video.id = "videoStart";
-        //video.playsinline = true;
         video.muted = false;
         video.loop = false;
         video.autoplay = false;
