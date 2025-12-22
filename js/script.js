@@ -123,10 +123,8 @@ class FaceBlaster {
         this.clearLevels();
         this.gameover.classList.remove("hide");
         const video = app.createVideo(this.assets["gameover"].objectURL, "videoGameOver", false, true, false);
-        this.gameover.prepend(video);
-        setTimeout(() => {
-            this.playVideo(video);
-        }, 1000);
+        this.gameover.replaceChildren(video);
+        this.playVideo(video);
     }
 
     setHeader(message) {
