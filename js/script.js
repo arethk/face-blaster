@@ -109,17 +109,19 @@ class FaceBlaster {
             const video = app.createVideo(this.assets["enemy1"].objectURL, "videoEnemy1_" + i, true, true, true);
             cell.replaceChildren(video);
         });
-        this.level4x4.classList.remove("hide");
+        this.setTimeout(() => {
+            this.level4x4.classList.remove("hide");
+        }, 1000);
     }
 
     handleTimesUp() {
         this.setHeader("Game Over!");
         this.hideContainerElements();
         this.clearLevels();
-        this.gameover.classList.remove("hide");
-        const video = app.createVideo(this.assets["gameover"].objectURL, "videoGameOver", false, true, true);
+        const video = app.createVideo(this.assets["gameover"].objectURL, "videoGameOver", false, true, false);
         this.gameover.prepend(video);
         this.playVideo(video);
+        this.gameover.classList.remove("hide");
     }
 
     setHeader(message) {
