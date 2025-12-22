@@ -1,4 +1,31 @@
 const DEV = false;
+const assets = {
+    "start": {
+        blob: null,
+        url: "assets/start.mp4"
+    },
+    "enemy1": {
+        blob: null,
+        url: "assets/enemy1.mp4"
+    },
+    "gameover": {
+        blob: null,
+        url: "assets/gameover.mp4"
+    }
+};
+async function loadAssets(data) {
+    const promises = [];
+    for (const key in data) {
+        const url = data[key].url;
+        promises.push(fetch(url)
+            .then(res => res.blob())
+            .then(blob => {
+                data[key].blob = blob;
+                return key;
+            }));
+    }
+    await Promise.all(promises);
+}
 class FaceBlaster {
     constructor() {
         // singelton
@@ -179,6 +206,17 @@ class FaceBlaster {
 
 const app = new FaceBlaster();
 
+window.onload = async function () {
+    await loadAssets(assets);
+    const spinner = document.querySelector(".spinner");
+    const startButton = document.querySelector(".start-button")
+    spinner.classList.add("hide");
+    startButton.classList.remove("hide");
+    if (DEV === true) {
+        startFaceBlaster();
+    }
+}
+
 window.onbeforeunload = function () {
     app.destroy();
 }
@@ -186,17 +224,25 @@ window.onbeforeunload = function () {
 function startFaceBlaster() {
     const startMenu = document.querySelector(".start-menu");
     if (DEV === false) {
-        const video = document.querySelector("#videoStart");
-        const clone = video.cloneNode(true);
-        clone.id = "videoStartClone";
-        clone.muted = false;
-        startMenu.replaceChildren(clone);
-        app.playVideo(clone);
+        const video = document.createElement("video");
+        video.src = URL.createObjectURL(assets["start"].blob);
+        video.classList.add("video");
+        video.id = "videoStart";
+        console.log(video.playsinline);
+        //video.playsinline = true;
+        console.log(video.playsinline);
+        console.log(video);
+        video.muted = false;
+        video.loop = false;
+        video.autoplay = false;
+        startMenu.replaceChildren(video);
+        app.playVideo(video);
         setTimeout(() => {
-            app.fadeOutElement(clone);
+            app.fadeOutElement(video);
         }, 4000);
         setTimeout(() => {
-            app.stopVideo(clone);
+            app.stopVideo(video);
+            URL.revokeObjectURL(video.src);
             startMenu.remove();
             app.reset();
         }, 5000);
