@@ -1,15 +1,15 @@
 const DEV = false;
 const assets = {
     "start": {
-        blob: null,
+        objectURL: null,
         url: "assets/start.mp4"
     },
     "enemy1": {
-        blob: null,
+        objectURL: null,
         url: "assets/enemy1.mp4"
     },
     "gameover": {
-        blob: null,
+        objectURL: null,
         url: "assets/gameover.mp4"
     }
 };
@@ -20,20 +20,21 @@ async function loadAssets(data) {
         promises.push(fetch(url)
             .then(res => res.blob())
             .then(blob => {
-                data[key].blob = blob;
+                data[key].objectURL = URL.createObjectURL(blob);
                 return key;
             }));
     }
     await Promise.all(promises);
 }
 class FaceBlaster {
-    constructor() {
+    constructor(assets) {
         // singelton
         if (FaceBlaster.instance) {
             return FaceBlaster.instance;
         }
         FaceBlaster.instance = this;
         // make the ui selectors handy and setup event listeners
+        this.assets = assets;
         this.header = document.querySelector(".header");
         this.time = document.querySelector(".time");
         this.footer = document.querySelector(".footer");
@@ -94,14 +95,8 @@ class FaceBlaster {
         this.startTimer(10);
         const cells = this.level4x4.querySelectorAll("div");
         Array.from(cells).forEach((cell, i) => {
-            const video = document.querySelector("#enemy1");
-            const clone = video.cloneNode(true);
-            clone.id = "enemy1Clone" + i;
-            clone.classList.remove("hide");
-            clone.loop = true;
-            clone.muted = true;
-            clone.autoplay = true;
-            cell.replaceChildren(clone);
+            const video = app.createVideo(this.assets["enemy1"].objectURL, "videoEnemy1_" + i, true, true, true);
+            cell.replaceChildren(video);
         });
     }
 
@@ -109,13 +104,9 @@ class FaceBlaster {
         this.setHeader("Game Over!");
         this.hideContainerElements();
         this.gameover.classList.remove("hide");
-        const video = document.querySelector("#videoGameOver");
-        const clone = video.cloneNode(true);
-        clone.id = "videoGameOverClone";
-        clone.loop = true;
-        clone.muted = false;
-        this.gameover.prepend(clone);
-        this.playVideo(clone);
+        const video = app.createVideo(this.assets["gameover"].objectURL, "videoGameOver", false, true, false);
+        this.gameover.prepend(video);
+        this.playVideo(video);
     }
 
     setHeader(message) {
@@ -184,6 +175,18 @@ class FaceBlaster {
         console.log(e);
     }
 
+    createVideo(src, id, muted, loop, autoplay) {
+        const video = document.createElement("video");
+        video.classList.add("video");
+        video.setAttribute("playsinline", "");
+        video.src = src;
+        video.id = id;
+        video.muted = muted === true;
+        video.loop = loop === true;
+        video.autoplay = autoplay === true;
+        return video;
+    }
+
     playVideo(video) {
         video.currentTime = 0;
         video.classList.remove("hide");
@@ -201,10 +204,16 @@ class FaceBlaster {
         if (this.interval) {
             clearInterval(this.interval);
         }
+        for (const key in assets) {
+            const objectURL = assets[key].objectURL;
+            if (objectURL) {
+                URL.revokeObjectURL(objectURL);
+            }
+        }
     }
 }
 
-const app = new FaceBlaster();
+const app = new FaceBlaster(assets);
 
 window.onload = async function () {
     await loadAssets(assets);
@@ -224,14 +233,8 @@ window.onbeforeunload = function () {
 function startFaceBlaster() {
     const startMenu = document.querySelector(".start-menu");
     if (DEV === false) {
-        const video = document.createElement("video");
-        video.src = URL.createObjectURL(assets["start"].blob);
-        video.classList.add("video");
-        video.setAttribute("playsinline", "");
-        video.id = "videoStart";
-        video.muted = false;
-        video.loop = false;
-        video.autoplay = false;
+        const objectURL = assets["start"].objectURL;
+        const video = app.createVideo(objectURL, "videoStart", false, false, false);
         startMenu.replaceChildren(video);
         app.playVideo(video);
         setTimeout(() => {
@@ -239,7 +242,8 @@ function startFaceBlaster() {
         }, 4000);
         setTimeout(() => {
             app.stopVideo(video);
-            URL.revokeObjectURL(video.src);
+            URL.revokeObjectURL(objectURL);
+            delete assets["start"];
             startMenu.remove();
             app.reset();
         }, 5000);
@@ -264,11 +268,7 @@ function playSound(id) {
 */
 
 function tryAgain() {
-    const video = document.querySelector("#videoGameOverClone");
+    const video = document.querySelector("#videoGameOver");
     video.remove();
     app.reset();
-}
-
-if (DEV === true) {
-    startFaceBlaster();
 }
