@@ -115,6 +115,9 @@ class FaceBlaster {
         Array.from(cells).forEach((cell, i) => {
             const video = this.createVideo(this.assets["enemy1"].objectURL, "videoEnemy1_" + i, true, true, true);
             cell.replaceChildren(video);
+            const blast = app.createVideo(this.assets["blast"].objectURL, "videoBlast", true, true, false);
+            blast.classList.add("hide");
+            cell.appendChild(blast);
         });
         setTimeout(() => {
             this.gameContainer.classList.remove("hide");
@@ -144,9 +147,13 @@ class FaceBlaster {
         const target = e.target;
         if (target && target.nodeName && (target.nodeName + "").toUpperCase() === "VIDEO" && ["videoGameOver"].includes(target.id) === false) {
             const parent = target.parentNode;
-            const objectURL = assets["blast"].objectURL;
-            const video = app.createVideo(objectURL, "videoBlast", true, true, true);
-            parent.replaceChildren(video);
+            // const objectURL = assets["blast"].objectURL;
+            // const video = app.createVideo(objectURL, "videoBlast", true, true, true);
+            // parent.replaceChildren(video);
+            target.remove();
+            const blast = parent.firstElementChild;
+            blast.classList.remove("hide");
+            app.playVideo(blast);
         }
     }
 
