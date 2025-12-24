@@ -157,7 +157,7 @@ class FaceBlaster {
                 if (sound && sound.paused === true) {
                     app.playSound("#soundEnemy1");
                 }
-                app.playSound("#soundGunshot");
+                app.playSound("#soundExplosion");
                 app.setPoints(app.getPoints() + 100);
                 const parent = target.parentNode;
                 target.remove();
