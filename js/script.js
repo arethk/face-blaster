@@ -115,7 +115,7 @@ class FaceBlaster {
         Array.from(cells).forEach((cell, i) => {
             const video = this.createVideo(this.assets["enemy1"].objectURL, "videoEnemy1_" + i, true, true, true);
             cell.replaceChildren(video);
-            const blast = app.createVideo(this.assets["blast"].objectURL, "videoBlast", true, true, false);
+            const blast = app.createVideo(this.assets["blast"].objectURL, "videoBlast_" + i, true, false, false);
             blast.classList.add("hide");
             cell.appendChild(blast);
         });
@@ -136,24 +136,42 @@ class FaceBlaster {
         video.classList.add("video-small");
         this.gameover.prepend(video);
         this.playVideo(video);
+    }
 
+    handleWin() {
+        this.setHeader("You Win!");
+        this.setPoints(this.getPoints() + (this.getTime() * 1000));
+        this.stopSound("#soundEnemy1");
+        this.playSound("#soundWin");
     }
 
     handleLevelElementClick(e) {
-        const sound = document.querySelector("#soundEnemy1");
-        if (sound && sound.paused === true) {
-            app.playSound("#soundEnemy1");
-        }
         const target = e.target;
-        if (target && target.nodeName && (target.nodeName + "").toUpperCase() === "VIDEO" && ["videoGameOver"].includes(target.id) === false) {
+        if (target && target.nodeName && (target.nodeName + "").toUpperCase() === "VIDEO" && ["videoGameOver"].includes(target.id) === false && (target.id + "").indexOf("videoBlast") === -1) {
+            const sound = document.querySelector("#soundEnemy1");
+            if (sound && sound.paused === true) {
+                app.playSound("#soundEnemy1");
+            }
+            app.playSound("#soundGunshot");
+            app.setPoints(app.getPoints() + 100);
             const parent = target.parentNode;
-            // const objectURL = assets["blast"].objectURL;
-            // const video = app.createVideo(objectURL, "videoBlast", true, true, true);
-            // parent.replaceChildren(video);
             target.remove();
             const blast = parent.firstElementChild;
             blast.classList.remove("hide");
             app.playVideo(blast);
+
+            // detect win
+            let isWinner = true;
+            const videos = document.querySelectorAll("video");
+            Array.from(videos).forEach((v) => {
+                if ((v.id + "").indexOf("videoEnemy1") === 0) {
+                    isWinner = false;
+                }
+            });
+            if (isWinner) {
+                clearInterval(app.interval);
+                app.handleWin();
+            }
         }
     }
 
