@@ -197,13 +197,16 @@ class FaceBlaster {
     }
 
     handleLevelElementClick(e) {
+        const sound = document.querySelector("#soundEnemy1");
+        if (sound && sound.paused === true) {
+            app.playSound("#soundEnemy1");
+        }
         const target = e.target;
         if (target && target.nodeName && (target.nodeName + "").toUpperCase() === "VIDEO" && ["videoGameOver"].includes(target.id) === false) {
             const parent = target.parentNode;
             const objectURL = assets["blast"].objectURL;
             const video = app.createVideo(objectURL, "videoBlast", true, true, true);
             parent.replaceChildren(video);
-            app.playVideo(video);
         }
     }
 
