@@ -24,6 +24,9 @@ body {
     width: 250px;
     font-size: larger;
     border-color: darkgreen;
+    border-radius: 12px;
+    border: none;
+    display: inline-block;
 }
 
 .gameover {
@@ -45,6 +48,9 @@ body {
     width: 250px;
     font-size: larger;
     border-color: darkred;
+    border-radius: 12px;
+    border: none;
+    display: inline-block;
 }
 
 .hide {

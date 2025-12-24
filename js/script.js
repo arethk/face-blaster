@@ -147,30 +147,36 @@ class FaceBlaster {
 
     handleLevelElementClick(e) {
         const target = e.target;
-        if (target && target.nodeName && (target.nodeName + "").toUpperCase() === "VIDEO" && ["videoGameOver"].includes(target.id) === false && (target.id + "").indexOf("videoBlast") === -1) {
-            const sound = document.querySelector("#soundEnemy1");
-            if (sound && sound.paused === true) {
-                app.playSound("#soundEnemy1");
-            }
-            app.playSound("#soundGunshot");
-            app.setPoints(app.getPoints() + 100);
-            const parent = target.parentNode;
-            target.remove();
-            const blast = parent.firstElementChild;
-            blast.classList.remove("hide");
-            app.playVideo(blast);
-
-            // detect win
-            let isWinner = true;
-            const videos = document.querySelectorAll("video");
-            Array.from(videos).forEach((v) => {
-                if ((v.id + "").indexOf("videoEnemy1") === 0) {
-                    isWinner = false;
+        if (target && target.nodeName && target.nodeName.toUpperCase() === "VIDEO" && target.id.indexOf("videoBlast") === -1) {
+            if (target.id === "videoGameOver") {
+                if (target.paused === true) {
+                    app.playVideo(target);
                 }
-            });
-            if (isWinner) {
-                clearInterval(app.interval);
-                app.handleWin();
+            } else {
+                const sound = document.querySelector("#soundEnemy1");
+                if (sound && sound.paused === true) {
+                    app.playSound("#soundEnemy1");
+                }
+                app.playSound("#soundGunshot");
+                app.setPoints(app.getPoints() + 100);
+                const parent = target.parentNode;
+                target.remove();
+                const blast = parent.firstElementChild;
+                blast.classList.remove("hide");
+                app.playVideo(blast);
+
+                // detect win
+                let isWinner = true;
+                const videos = document.querySelectorAll("video");
+                Array.from(videos).forEach((v) => {
+                    if (v.id.indexOf("videoEnemy1") === 0) {
+                        isWinner = false;
+                    }
+                });
+                if (isWinner) {
+                    clearInterval(app.interval);
+                    app.handleWin();
+                }
             }
         }
     }
