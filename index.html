@@ -19,10 +19,6 @@
         <div class="time hide"></div>
         <div class="container">
             <div class="gameover hide">
-                <video id="videoGameOver" class="" width="100%" height="100%" preload="auto"
-                    poster="assets/gameover_poster.png" playsinline loop>
-                    <source src="assets/gameover.mp4" type="video/mp4">
-                </video>
                 <button type="button" class="tryagain-button" onclick="tryAgain()">Try Again</button>
             </div>
             <div class="level4x4 hide">
@@ -48,15 +44,19 @@
             Points: <span class="points"></span>
         </div>
     </div>
-    <!-- <audio id="soundStart" preload="auto">
-        <source src="sounds/start.mp3" type="audio/mpeg" />
-    </audio> -->
+    <audio id="soundEnemy1" preload="auto" loop>
+        <source src="assets/enemy1.mp3" type="audio/mpeg" />
+    </audio>
     <!-- <video id="videoStart" class="hide" width="100%" height="100%" preload="auto" poster="assets/start_poster.png"
         playsinline muted>
         <source src="assets/start.mp4" type="video/mp4">
     </video>
     <video id="enemy1" class="hide" width="100%" height="100%" preload="auto" poster="assets/enemy1_poster.png" playsinline muted>
         <source src="assets/enemy1.mp4" type="video/mp4">
+    </video>
+    <video id="videoGameOver" class="" width="100%" height="100%" preload="auto"
+        poster="assets/gameover_poster.png" playsinline loop>
+        <source src="assets/gameover.mp4" type="video/mp4">
     </video>
     <video id="videoGameOver" class="hide" width="100%" height="100%" preload="auto" poster="assets/gameover_poster.png"
         playsinline muted>

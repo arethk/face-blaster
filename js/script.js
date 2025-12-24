@@ -4,14 +4,18 @@ const assets = {
         objectURL: null,
         url: "assets/start.mp4"
     },
+    "blast": {
+        objectURL: null,
+        url: "assets/blast.mp4"
+    },
     "enemy1": {
         objectURL: null,
         url: "assets/enemy1.mp4"
     },
-    // "gameover": {
-    //     objectURL: null,
-    //     url: "assets/gameover.mp4"
-    // }
+    "gameover": {
+        objectURL: null,
+        url: "assets/gameover.mp4"
+    }
 };
 async function loadAssets(data) {
     const promises = [];
@@ -79,6 +83,7 @@ class FaceBlaster {
         } else {
             console.error("Cell elements not found");
         }
+        this.stopSound("#soundEnemy1");
     }
 
     runGame() {
@@ -114,6 +119,7 @@ class FaceBlaster {
         setTimeout(() => {
             this.gameContainer.classList.remove("hide");
             this.startTimer(10);
+            this.playSound("#soundEnemy1");
         }, 1000);
     }
 
@@ -122,9 +128,8 @@ class FaceBlaster {
         this.hideContainerElements();
         this.clearLevels();
         this.gameover.classList.remove("hide");
-        const video = document.querySelector("#videoGameOver");
-        // const video = this.createVideo(this.assets["gameover"].objectURL, "videoGameOver", false, true, false);
-        // this.gameover.prepend(video);
+        const video = this.createVideo(this.assets["gameover"].objectURL, "videoGameOver", false, true, false);
+        this.gameover.prepend(video);
         this.playVideo(video);
 
     }
@@ -192,7 +197,13 @@ class FaceBlaster {
     }
 
     handleLevelElementClick(e) {
-        console.log(e);
+        const target = e.target;
+        if (target && target.nodeName && (target.nodeName + "").toUpperCase() === "VIDEO" && ["videoGameOver"].includes(target.id) === false) {
+            const parent = target.parentNode;
+            const objectURL = assets["blast"].objectURL;
+            const video = app.createVideo(objectURL, "videoBlast", true, true, true);
+            parent.replaceChildren(video);
+        }
     }
 
     createVideo(src, id, muted, loop, autoplay) {
@@ -218,6 +229,27 @@ class FaceBlaster {
 
     stopVideo(video) {
         video.pause();
+    }
+
+    playSound(id) {
+        const sound = document.querySelector(id);
+        if (sound) {
+            sound.currentTime = 0;
+            sound.play().catch(error => {
+                console.log('Sound playback failed:', error);
+            });
+        } else {
+            console.error("Sound not found");
+        }
+    }
+
+    stopSound(id) {
+        const sound = document.querySelector(id);
+        if (sound) {
+            sound.pause();
+        } else {
+            console.error("Sound not found");
+        }
     }
 
     destroy() {
@@ -273,23 +305,8 @@ function startFaceBlaster() {
     }
 }
 
-/*
-//playSound("#soundStart");
-function playSound(id) {
-    const sound = document.querySelector(id);
-    if (sound) {
-        sound.play().catch(error => {
-            console.log('Playback failed:', error);
-        });
-    } else {
-        console.error("Sound not found");
-    }
-}
-*/
-
 function tryAgain() {
     const video = document.querySelector("#videoGameOver");
-    //video.remove();
-    app.stopVideo(video);
+    video.remove();
     app.reset();
 }
