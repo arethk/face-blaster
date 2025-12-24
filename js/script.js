@@ -203,6 +203,7 @@ class FaceBlaster {
             const objectURL = assets["blast"].objectURL;
             const video = app.createVideo(objectURL, "videoBlast", true, true, true);
             parent.replaceChildren(video);
+            app.playVideo(video);
         }
     }
 
